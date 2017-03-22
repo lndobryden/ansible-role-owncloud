@@ -27,7 +27,7 @@
     image: owncloud:9.1.4
     restart_policy: always
     links:
-    - "owncloud-postgres:postgres"
+    - "owncloud-database:owncloud-database"
     ports:
      - "80:80"
     volumes:
