@@ -18,7 +18,7 @@
       POSTGRES_USER: owncloud
       POSTGRES_PASSWORD: owncloud
     volumes:
-    - {{ owncloud_database_dir }}:/var/lib/postgresql/data
+    - "{{ owncloud_database_dir }}:/var/lib/postgresql/data"
 
 - name: Install Owncloud Docker
   docker_container:
@@ -31,9 +31,9 @@
     ports:
      - "80:80"
     volumes:
-    - {{ owncloud_apps_dir }}:/var/www/html/apps
-    - {{ owncloud_config_dir }}:/var/www/html/config
-    - {{ owncloud_data_dir }}:/var/www/html/data
+    - "{{ owncloud_apps_dir }}:/var/www/html/apps"
+    - "{{ owncloud_config_dir }}:/var/www/html/config"
+    - "{{ owncloud_data_dir }}:/var/www/html/data"
 
 - name: Setup Postgres Backups
   cron:
