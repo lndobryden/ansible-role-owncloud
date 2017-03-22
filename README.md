@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/lndobryden/ansible-role-owncloud.svg?branch=master)](https://travis-ci.org/lndobryden/ansible-role-owncloud)
 Owncloud - A docker based installation
 =========
 
