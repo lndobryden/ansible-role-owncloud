@@ -1,0 +1,7 @@
+---
+# vars file for owncloud
+owncloud_apps_dir:
+owncloud_config_dir:
+owncloud_data_dir:
+owncloud_database_dir:
+owncloud_database_backups_dir:

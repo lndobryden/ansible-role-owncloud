@@ -1,0 +1,61 @@
+---
+# Docker-based owncloud installation
+
+- file: path={{ owncloud_apps_dir }} state=directory mode=0755
+- file: path={{ owncloud_config_dir }} state=directory mode=0755
+- file: path={{ owncloud_data_dir }} state=directory mode=0755
+- file: path={{ owncloud_database_dir }} state=directory mode=0755
+- file: path={{ owncloud_database_backups_dir }} state=directory mode=0755
+
+- name: Install Owncloud postgres
+  docker_container:
+    name: owncloud-database
+    state: started
+    image: postgres:9.6
+    restart_policy: always
+    env:
+      POSTGRES_DB: owncloud
+      POSTGRES_USER: owncloud
+      POSTGRES_PASSWORD: owncloud
+    volumes:
+    - {{ owncloud_database_dir }}:/var/lib/postgresql/data
+
+- name: Install Owncloud Docker
+  docker_container:
+    name: owncloud
+    state: started
+    image: owncloud:9.1.4
+    restart_policy: always
+    links:
+    - "owncloud-postgres:postgres"
+    ports:
+     - "80:80"
+    volumes:
+    - {{ owncloud_apps_dir }}:/var/www/html/apps
+    - {{ owncloud_config_dir }}:/var/www/html/config
+    - {{ owncloud_data_dir }}:/var/www/html/data
+
+- name: Setup Postgres Backups
+  cron:
+    name: owncloud postgres backups
+    weekday: 0
+    minute: 0
+    hour: 3
+    user: root
+    job: "docker exec -t -u postgres owncloud-postgres pg_dumpall -c > {{ owncloud_database_backups_dir }}/owncloud-db-backup_`date +%d-%m-%Y_%H_%M_%S`.sql"
+    cron_file: owncloud-database-backup
+
+- name: Install Owncloud Key
+  apt_key:
+    url: http://download.opensuse.org/repositories/isv:ownCloud:desktop/Ubuntu_16.10/Release.key
+    state: present
+
+- name: Install Owncloud repo
+  apt_repository:
+    repo: deb http://download.opensuse.org/repositories/isv:/ownCloud:/desktop/Ubuntu_16.10/ /
+    state: present
+
+- name: Install Owncloud client
+  apt:
+    name: owncloud-client
+    state: present

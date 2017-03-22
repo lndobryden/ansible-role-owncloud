@@ -1,0 +1,7 @@
+---
+# defaults file for owncloud
+owncloud_apps_dir: /opt/owncloud/apps
+owncloud_config_dir: /opt/owncloud/config
+owncloud_data_dir: /opt/owncloud/data
+owncloud_database_dir: /opt/owncloud/database-files
+owncloud_database_backups_dir: /opt/owncloud/database-backups
